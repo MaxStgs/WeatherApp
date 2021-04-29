@@ -6,7 +6,7 @@
 #include "Interfaces/IHttpRequest.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "WeatherAppTypes.h"
-#include "../../../../../../../../Soft/UE_4.25/Engine/Plugins/Runtime/Database/SQLiteSupport/Source/SQLiteSupport/Public/SQLiteDatabaseConnection.h"
+#include "SQLiteDatabaseConnection.h"
 
 #include "WeatherAppBlueprintLibrary.generated.h"
 
@@ -42,7 +42,7 @@ class UWeatherAppBlueprintLibrary final : public UBlueprintFunctionLibrary
     static void GetCurrentWeatherForCityById(const int CityId, const FOnCurrentWeatherReceived& ResponseCallback,
                                              const FOnBadRequest& BadRequestCallback);
 
-    static TSharedRef<IHttpRequest> ConfigureRequest(const int CityId, const bool bGetCurrentTime);
+    static TSharedRef<IHttpRequest, ESPMode::ThreadSafe> ConfigureRequest(const int CityId, const bool bGetCurrentTime);
 
     UFUNCTION(BlueprintCallable, Category="WeatherApp|Helpers")
     static void GetForecast5WeatherForCityById(int CityId, const FOnForecastWeatherReceived& ResponseCallback,

@@ -41,7 +41,7 @@ FString UWeatherAppBlueprintLibrary::ConvertKelvinsToDegreesString(const float K
 
 void UWeatherAppBlueprintLibrary::CheckIsInternetAvailable(const FOnExecuted& OnExecuted)
 {
-    TSharedRef<IHttpRequest> HttpRequest = ConfigureRequest(-1, false);
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = ConfigureRequest(-1, false);
 
     HttpRequest->OnProcessRequestComplete().BindStatic(
         &UWeatherAppBlueprintLibrary::CheckIsInternetAvailable_HttpRequestComplete, OnExecuted);
@@ -100,7 +100,7 @@ void UWeatherAppBlueprintLibrary::GetCurrentWeatherForCityById(const int CityId,
                                                                const FOnCurrentWeatherReceived& ResponseCallback,
                                                                const FOnBadRequest& BadRequestCallback)
 {
-    TSharedRef<IHttpRequest> HttpRequest = ConfigureRequest(CityId, true);
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = ConfigureRequest(CityId, true);
 
     HttpRequest->OnProcessRequestComplete().BindStatic(
         &UWeatherAppBlueprintLibrary::GetCurrentWeatherForCityById_HttpRequestComplete,
@@ -112,7 +112,7 @@ void UWeatherAppBlueprintLibrary::GetForecast5WeatherForCityById(const int CityI
                                                                  const FOnForecastWeatherReceived& ResponseCallback,
                                                                  const FOnBadRequest& BadRequestCallback)
 {
-    TSharedRef<IHttpRequest> HttpRequest = ConfigureRequest(CityId, false);
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = ConfigureRequest(CityId, false);
 
     HttpRequest->OnProcessRequestComplete().BindStatic(
         &UWeatherAppBlueprintLibrary::GetForecastWeatherForCityById_HttpRequestComplete,
@@ -201,9 +201,9 @@ void UWeatherAppBlueprintLibrary::GetForecastWeatherForCityById_HttpRequestCompl
     }
 }
 
-TSharedRef<IHttpRequest> UWeatherAppBlueprintLibrary::ConfigureRequest(const int CityId, const bool bGetCurrentTime)
+TSharedRef<IHttpRequest, ESPMode::ThreadSafe> UWeatherAppBlueprintLibrary::ConfigureRequest(const int CityId, const bool bGetCurrentTime)
 {
-    TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = FHttpModule::Get().CreateRequest();
 
     const FString AppID = "8a156ac591cd2f1478d6d5e3d38b2db6";
 
